@@ -636,13 +636,16 @@ void setup()
   // loads data from EEPROM if available else uses defaults (and resets step acceleration rate)
   Config_RetrieveSettings();
 
-  tp_init();    // Initialize temperature loop
+  tp_init();    // I  pinMode(LASER_PWM, OUTPUT);
+  //initialize temperature loop
   plan_init();  // Initialize planner;
   watchdog_init();
   st_init();    // Initialize stepper, this enables interrupts!
   setup_photpin();
   servo_init();
   
+  //XXX: m3/m5 support
+  pinMode(SSR_PIN, OUTPUT);
 
   lcd_init();
   _delay_ms(1000);	// wait 1sec to display the splash screen
@@ -789,7 +792,7 @@ void SD_StoreCardPos() {
 
   SERIAL_ECHO("Trying to open: ");
   SERIAL_ECHO(contfilename);
-  SERIAL_ECHOLN("");*/
+Detailed Z-Probe, probes the bed at 3 or more points  SERIAL_ECHOLN("");*/
 
   card.openFile(contfilename,true,true,true);
   card.startFileprint();
@@ -1239,13 +1242,13 @@ void probing_failed() {
     {
       SERIAL_ERRORLNPGM(MSG_REWIPE);
       LCD_MESSAGEPGM(MSG_REWIPE);
-      do_blocking_move_to(-16.0, 25.0, 10.0);
-      do_blocking_move_to(current_position[X_AXIS], current_position[Y_AXIS], 1.0);
-      for(uint8_t i=0; i<6; i++)
-      {
-        do_blocking_move_to(current_position[X_AXIS], 95.0, current_position[Z_AXIS]);
-        do_blocking_move_to(current_position[X_AXIS], 25.0, current_position[Z_AXIS]);
-      }
+//      do_blocking_move_to(-16.0, 25.0, 10.0);
+//      do_blocking_move_to(current_position[X_AXIS], current_position[Y_AXIS], 1.0);
+//      for(uint8_t i=0; i<6; i++)
+//      {
+//        do_blocking_move_to(current_position[X_AXIS], 95.0, current_position[Z_AXIS]);
+//        do_blocking_move_to(current_position[X_AXIS], 25.0, current_position[Z_AXIS]);
+//      }
       do_blocking_move_to(LEFT_PROBE_BED_POSITION, FRONT_PROBE_BED_POSITION, 10.0);
       if(!reprobe_attempts[0])
         reprobe_attempts[0] = 1;
@@ -1688,7 +1691,7 @@ void process_commands()
 
       Config_StoreLevel();
 
-      free(plane_equation_coefficients);
+      //free(plane_equation_coefficients);
 
       st_synchronize();
 
@@ -2001,13 +2004,13 @@ void process_commands()
               current_position[Z_AXIS] += Z_RAISE_AFTER_HOMING - Z_MIN_POS; //Sets Z distance back to 0 for auto leveling
 	    }
       #endif
-      /*
+      ///*
       #ifdef ENABLE_AUTO_BED_LEVELING
         if((home_all_axis) || (code_seen(axis_codes[Z_AXIS]))) {
           current_position[Z_AXIS] += zprobe_zoffset;  //Add Z_Probe offset (the distance is negative)
         }
       #endif
-      */
+      //*/ //XXX:HACK
       if(code_seen(axis_codes[Z_AXIS])
           #ifdef RESUME_FEATURE
             && !home_x_and_y
@@ -2412,6 +2415,16 @@ void process_commands()
     }
     break;
 #endif
+    case 3:
+    //XXX: DO M3
+      st_synchronize();
+      digitalWrite(SSR_PIN, HIGH);
+      break;
+    case 5:
+      //XXX: DO M5
+      st_synchronize();
+      digitalWrite(SSR_PIN, LOW);
+    break;
     case 17:
         LCD_MESSAGEPGM(MSG_NO_MOVE);
         enable_x();
@@ -5166,6 +5179,8 @@ void kill()
   disable_e1();
   disable_e2();
 
+  digitalWrite(SSR_PIN, LOW);
+
 #if defined(PS_ON_PIN) && PS_ON_PIN > -1
   pinMode(PS_ON_PIN,INPUT);
 #endif
@@ -5187,6 +5202,7 @@ void kill()
 void Stop()
 {
   disable_heater();
+  //digitalWrite(SSR_PIN, LOW);
   if(Stopped == false) {
     Stopped = true;
     Stopped_gcode_LastN = gcode_LastN; // Save last g_code for restart

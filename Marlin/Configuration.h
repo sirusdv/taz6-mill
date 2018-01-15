@@ -104,8 +104,8 @@
 // 147 is Pt100 with 4k7 pullup
 // 110 is Pt100 with 1k pullup (non standard)
 
-#define TEMP_SENSOR_0 5
-#define TEMP_SENSOR_1 5
+#define TEMP_SENSOR_0 0
+#define TEMP_SENSOR_1 0
 //#define TEMP_SENSOR_2 0
 #define TEMP_SENSOR_BED 7
 
@@ -126,10 +126,10 @@
 // The minimal temperature defines the temperature below which the heater will not be enabled It is used
 // to check that the wiring to the thermistor is not broken.
 // Otherwise this would lead to the heater being powered on all the time.
-#define HEATER_0_MINTEMP 5
-#define HEATER_1_MINTEMP 5
-#define HEATER_2_MINTEMP 5
-#define BED_MINTEMP 5
+#define HEATER_0_MINTEMP 0
+#define HEATER_1_MINTEMP 0
+#define HEATER_2_MINTEMP 0
+#define BED_MINTEMP 0
 
 // When temperature exceeds max temp, your heater will be switched off.
 // This feature exists to protect your hotend from overheating accidentally, but *NOT* from thermistor short/failure!
@@ -235,11 +235,11 @@
 
 //this prevents dangerous Extruder moves, i.e. if the temperature is under the limit
 //can be software-disabled for whatever purposes by
-#define PREVENT_DANGEROUS_EXTRUDE
+//#define PREVENT_DANGEROUS_EXTRUDE
 //if PREVENT_DANGEROUS_EXTRUDE is on, you can still disable (uncomment) very long bits of extrusion separately.
-#define PREVENT_LENGTHY_EXTRUDE
+//#define PREVENT_LENGTHY_EXTRUDE
 
-#define EXTRUDE_MINTEMP 120
+#define EXTRUDE_MINTEMP 0
 #define EXTRUDE_MAXLENGTH (X_MAX_LENGTH+Y_MAX_LENGTH) //prevent extrusion of very large distances.
 
 /*================== Thermal Runaway Protection ==============================
@@ -316,7 +316,7 @@ const bool X_MIN_ENDSTOP_INVERTING = false; // set to true to invert the logic o
 const bool Y_MIN_ENDSTOP_INVERTING = false; // set to true to invert the logic of the endstop.
 const bool Z_MIN_ENDSTOP_INVERTING = true; // set to true to invert the logic of the endstop.
 const bool Z_PROBE_ENDSTOP_INVERTING = true; // set to true to invert the logic of the endstop.
-const bool X_MAX_ENDSTOP_INVERTING = false; // set to true to invert the logic of the endstop.
+const bool X_MAX_ENDSTOP_INVERTING = true; // set to true to invert the logic of the endstop.
 const bool Y_MAX_ENDSTOP_INVERTING = false; // set to true to invert the logic of the endstop. USED FOR EMI ATTENUATION!
 const bool Z_MAX_ENDSTOP_INVERTING = false; // set to true to invert the logic of the endstop.
 //#define DISABLE_MAX_ENDSTOPS
@@ -394,10 +394,10 @@ const bool Z_MAX_ENDSTOP_INVERTING = false; // set to true to invert the logic o
   #ifdef AUTO_BED_LEVELING_GRID
 
     // set the rectangle in which to probe
-    #define LEFT_PROBE_BED_POSITION -9
+    #define LEFT_PROBE_BED_POSITION -18
     #define RIGHT_PROBE_BED_POSITION 288
     #define BACK_PROBE_BED_POSITION 289
-    #define FRONT_PROBE_BED_POSITION -9
+    #define FRONT_PROBE_BED_POSITION -18
 
      // set the number of grid points per dimension
      // I wouldn't see a reason to go above 3 (=9 probing points on the bed)
@@ -426,12 +426,12 @@ const bool Z_MAX_ENDSTOP_INVERTING = false; // set to true to invert the logic o
 
   #define Z_RAISE_BEFORE_HOMING 5       // (in mm) Raise Z before homing (G28) for Probe Clearance.
                                         // Be sure you have this distance over your Z_MAX_POS in case.
-  #define Z_RAISE_AFTER_HOMING 10       // Raise Z after homing on a LulzBot TAZ 6 with a mometary switch.                                     
+  #define Z_RAISE_AFTER_HOMING 15       // Raise Z after homing on a LulzBot TAZ 6 with a mometary switch.                                     
 
   #define XY_TRAVEL_SPEED 6000         // X and Y axis travel speed between probes, in mm/min
 
-  #define Z_RAISE_BEFORE_PROBING 5    //How much the extruder will be raised before traveling to the first probing point.
-  #define Z_RAISE_BETWEEN_PROBINGS 5  //How much the extruder will be raised when traveling from between next probing points
+  #define Z_RAISE_BEFORE_PROBING 15    //How much the extruder will be raised before traveling to the first probing point.
+  #define Z_RAISE_BETWEEN_PROBINGS 15  //How much the extruder will be raised when traveling from between next probing points
 
   //#define Z_PROBE_SLED // turn on if you have a z-probe mounted on a sled like those designed by Charles Bell
   //#define SLED_DOCKING_OFFSET 5 // the extra distance the X axis must travel to pickup the sled. 0 should be fine but you can push it further if you'd like.
@@ -456,7 +456,7 @@ const bool Z_MAX_ENDSTOP_INVERTING = false; // set to true to invert the logic o
   #ifdef Z_SAFE_HOMING
 
     #define Z_SAFE_HOMING_X_POINT (-19)    // X point for Z homing when homing all axis (G28)
-    #define Z_SAFE_HOMING_Y_POINT (258)    // Y point for Z homing when homing all axis (G28)
+    #define Z_SAFE_HOMING_Y_POINT (245)    // Y point for Z homing when homing all axis (G28)
 
   #endif
 
@@ -544,7 +544,7 @@ const bool Z_MAX_ENDSTOP_INVERTING = false; // set to true to invert the logic o
 //This feature keeps track of the current layer, accounting for Z lifts and multiple objects
 //The current layer number can be found in Menu > Tune > Layer whilst printing from an LCD controller (via SD) or by sending M114 (SD or not).
 
-#define TRACK_LAYER
+//#define TRACK_LAYER
 #ifdef TRACK_LAYER
   //#define INCREASE_LAYER_ON_HOP //This type of layer tracking depends on the slicing software being used (uncomment this if you are using Slic3r)
 #endif
@@ -553,7 +553,7 @@ const bool Z_MAX_ENDSTOP_INVERTING = false; // set to true to invert the logic o
 #define CUSTOM_M_CODES
 #ifdef CUSTOM_M_CODES
   #define CUSTOM_M_CODE_SET_Z_PROBE_OFFSET 851
-  #define Z_PROBE_OFFSET_RANGE_MIN -2
+  #define Z_PROBE_OFFSET_RANGE_MIN -5
   #define Z_PROBE_OFFSET_RANGE_MAX 0
 #endif
 

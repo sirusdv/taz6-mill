@@ -2357,6 +2357,7 @@ DaveX plan for Teensylu/printrboard-type pinouts (ref teensylu & sprinter) for a
 #endif
 
 #define LARGE_FLASH true
+#define SSR_PIN 31
 
 #define X_STEP_PIN 37
 #define X_DIR_PIN 48
